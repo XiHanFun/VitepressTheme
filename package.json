@@ -1,6 +1,6 @@
 {
   "name": "@xihanfun/vitepress-theme",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "曦寒文档站统一主题：配色、版式、正文组件与中文站点默认配置，供各 VitePress 文档站共用。",
   "author": {
