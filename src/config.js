@@ -1,3 +1,5 @@
+import { renderPageMarkdown, resolveSite, writeLlmsAssets } from "./llms.js";
+
 /** 本包名，用于让 Vite 编译主题源码而不是当作预构建依赖 */
 const PACKAGE_NAME = "@xihanfun/vitepress-theme";
 
@@ -111,13 +113,15 @@ function defaultHead(keywords) {
 }
 
 /**
- * 开发服务器上按需生成 /__markdown/<页面路径> 的 Markdown。
- * @param {(relativePath: string) => Promise<string | null>} render
+ * 开发服务器上按需生成 /__markdown/<页面路径> 的 Markdown，与构建产物里的单页 .md 相同。
+ * @param {import("./config").XiHanLlmsOptions} llms
  */
-function pageMarkdownPlugin(render) {
+function pageMarkdownPlugin(llms) {
   return {
     name: "xihan-doc-page-markdown",
     configureServer(server) {
+      const site = server.config.vitepress ?? { root: server.config.root, srcDir: server.config.root };
+      let siteUrl;
       server.middlewares.use(async (request, response, next) => {
         const pathname = new URL(request.url ?? "/", "http://localhost").pathname;
         const prefix = "/__markdown/";
@@ -126,7 +130,8 @@ function pageMarkdownPlugin(render) {
           return;
         }
         try {
-          const markdown = await render(decodeURIComponent(pathname.slice(prefix.length)));
+          siteUrl ??= await resolveSite(site.root, llms);
+          const markdown = await renderPageMarkdown(site.srcDir, siteUrl, decodeURIComponent(pathname.slice(prefix.length)), llms);
           if (markdown === null) {
             response.statusCode = 404;
             response.end("Not Found");
@@ -170,7 +175,7 @@ function dedupeVue(dedupe) {
  * @returns {import("vitepress").UserConfig<import("vitepress").DefaultTheme.Config>}
  */
 export function defineXiHanConfig(options) {
-  const { repo, keywords, pageMarkdown, head, themeConfig, vite, ...site } = options;
+  const { repo, keywords, llms, head, themeConfig, vite, buildEnd, ...site } = options;
   const userVite = vite ?? {};
 
   return {
@@ -179,6 +184,12 @@ export function defineXiHanConfig(options) {
     cleanUrls: true,
     ...site,
     head: [...defaultHead(keywords), ...(head ?? [])],
+    // 站点自己的 buildEnd 先跑，它抛错时不再产出机读资产
+    async buildEnd(siteConfig) {
+      await buildEnd?.(siteConfig);
+      if (llms)
+        await writeLlmsAssets(siteConfig, llms);
+    },
     themeConfig: {
       ...defaultThemeConfig(repo),
       ...themeConfig,
@@ -186,7 +197,7 @@ export function defineXiHanConfig(options) {
     vite: {
       ...userVite,
       plugins: [
-        ...(pageMarkdown ? [pageMarkdownPlugin(pageMarkdown)] : []),
+        ...(llms ? [pageMarkdownPlugin(llms)] : []),
         ...(userVite.plugins ?? []),
       ],
       resolve: {
