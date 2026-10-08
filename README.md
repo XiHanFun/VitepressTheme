@@ -11,7 +11,7 @@
 | 配色 | 蓝色品牌色与明暗两套取值，首页标题渐变，提示块、按钮、链接、搜索高亮跟随品牌色 |
 | 版式 | 宽屏不居中留白，导航栏、侧边栏与正文贴视口铺开；338px 侧边栏与页面同底，悬停时才出现滚动条 |
 | 细节 | 细滚动条、暗色模式链接提亮、本地搜索结果卡片、导航徽章 `.xh-nav-badge` |
-| 组件 | 正文上方的「取本页 Markdown」直链 |
+| 组件 | 正文上方的「取本页 Markdown」直链；顶部公告横幅、右侧赞助位与广告位、右下角 GitHub Star 提示 |
 | 机读资产 | 构建期产出 `llms.txt` 索引、`llms-full.txt` 全站正文、按栏目的分册与每页 `.md`，开发服务器上按需生成单页 Markdown |
 | 配置 | 中文界面文案、本地搜索中文文案、目录与翻页、页脚、作者与图标元信息、按仓库名生成的社交链接与编辑链接 |
 
@@ -65,7 +65,9 @@ export default defineXiHanTheme({ pageMarkdown: true });
 | 选项 | 说明 |
 | --- | --- |
 | `pageMarkdown` | 正文上方显示「取本页 Markdown」直链，指向构建产物里同路径的 `.md` |
-| `slots` | 填入默认布局的插槽，如 `{ "layout-bottom": () => h(MyComponent) }` |
+| `promotions` | 运营数据（公告横幅、赞助位、广告位）的 JSON 地址，缺省读 `https://docs.xihanfun.com/data/promotions.json`，`false` 关闭三者 |
+| `starPrompt` | GitHub Star 提示，缺省取导航栏 GitHub 链接指向的仓库（只指向组织主页时不提示），可传 `{ repo, name }` 覆盖，`false` 关闭 |
+| `slots` | 填入默认布局的插槽，渲染在主题自带内容之后，如 `{ "layout-bottom": () => h(MyComponent) }` |
 | `enhanceApp` | 在默认主题的 `enhanceApp` 之后执行，用来注册站点自己的全局组件 |
 
 站点自己的样式在 `theme/index.ts` 里导入本包之后再导入，同等特异性下排在后面的覆盖主题。
@@ -98,9 +100,28 @@ defineXiHanConfig({
 
 正文里的 `<code v-pre>`、`<Badge text="…" />` 会压成行内代码，`[[toc]]` 会去掉；首页没有正文时输出 frontmatter。
 
+### 运营数据
+
+公告横幅、赞助位与广告位共用一份 JSON，由组织门户站发布在 `docs/public/data/promotions.json`，各站运行时读取，改完部署门户即生效：
+
+```json
+{
+  "banner": { "id": "2026-10-xxx", "text": "公告文案", "link": "https://…", "linkText": "了解详情" },
+  "sponsorLink": "https://docs.xihanfun.com/cosmos/sponsor",
+  "sponsors": [{ "name": "赞助商", "url": "https://…", "img": "https://…/logo.png", "tier": "large" }],
+  "ads": [{ "name": "广告", "url": "https://…", "img": "https://…/ad.png", "text": "说明" }]
+}
+```
+
+- `banner`：换一条公告就换一个 `id`，读者关闭过的 `id` 不再出现；置为 `null` 即撤下。
+- `sponsors`：`tier` 取 `large` 独占一行、`small`（缺省）一行两个，末尾总有一格「成为赞助商」指向 `sponsorLink`。
+- `ads`：每次打开页面随机展示一条，读者可以关闭。
+
+GitHub Star 提示不需要数据：读过两页正文、停留满一分钟，或从代码块、表格里复制内容时弹出；「稍后再说」七天内不再出现，点过 Star 三十天内不再出现，关闭或「不再提示」后不再出现。
+
 ## 本地开发
 
-`playground/` 是主题的预览站，以 `link:..` 引用本仓库源码，覆盖首页、正文排版、表格、代码、提示块与徽章。
+`playground/` 是主题的预览站，以 `link:..` 引用本仓库源码，覆盖首页、正文排版、表格、代码、提示块与徽章，并用 `public/data/promotions.json` 里的示例数据展示公告、赞助与广告位。
 
 ```bash
 cd playground
@@ -118,7 +139,9 @@ VitepressTheme/
 │   ├── index.ts                 # 主题入口：defineXiHanTheme
 │   ├── config.js / config.d.ts  # 站点配置：defineXiHanConfig（Node 直接加载，写成 JS）
 │   ├── llms.js                  # 机读资产生成
-│   ├── components/              # XhPageMarkdown
+│   ├── options.ts               # 主题运行时选项
+│   ├── composables/             # 运营数据读取
+│   ├── components/              # 取本页 Markdown、公告横幅、赞助与广告位、Star 提示
 │   └── styles/                  # vars 配色 / layout 版式 / base 细节
 ├── playground/                  # 预览站
 ├── .github/workflows/           # ci.yml 构建预览站，release.yml 发布到 npm

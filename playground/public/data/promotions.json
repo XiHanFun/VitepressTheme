@@ -1,0 +1,16 @@
+{
+  "banner": {
+    "id": "playground-demo",
+    "text": "曦寒文档主题预览：公告横幅示例",
+    "link": "https://docs.xihanfun.com",
+    "linkText": "前往文档门户"
+  },
+  "sponsorLink": "https://docs.xihanfun.com/cosmos/sponsor",
+  "sponsors": [
+    { "name": "曦寒懿", "url": "https://www.xihanfun.com", "img": "/images/logo.png", "tier": "large" },
+    { "name": "开发框架", "url": "https://framework.docs.xihanfun.com", "tier": "small" }
+  ],
+  "ads": [
+    { "name": "基础应用", "url": "https://basicapp.docs.xihanfun.com", "img": "/images/logo.png", "text": "广告位示例：多租户中后台，开箱即用" }
+  ]
+}
