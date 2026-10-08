@@ -1,0 +1,56 @@
+/**
+ * 全宽布局：导航栏、侧边栏与正文贴视口铺开，宽屏下不再居中留白
+ * --------------------------------------------------------------------------
+ * 类名写两遍用来追平默认主题带 scoped 属性的选择器特异性。
+ */
+
+.VPNavBar .wrapper > .container.container {
+  max-width: none;
+}
+
+@media (min-width: 90rem) {
+  .VPNavBar.has-sidebar.has-sidebar {
+    --vp-nav-col-offset: var(--vp-sidebar-width);
+  }
+
+  .VPSidebar.VPSidebar {
+    padding-left: 2rem;
+    width: var(--vp-sidebar-width);
+  }
+
+  .VPContent.has-sidebar.has-sidebar {
+    padding-right: 0;
+    padding-left: var(--vp-sidebar-width);
+  }
+}
+
+/* 正文列铺满侧边栏与右侧目录之间的空间 */
+.VPDoc.has-aside .content-container.content-container {
+  max-width: none;
+}
+
+/**
+ * 侧边栏
+ * -------------------------------------------------------------------------- */
+
+.VPSidebar.VPSidebar {
+  scrollbar-gutter: stable both-edges;
+}
+
+@media (width < 60rem) {
+  .VPSidebar.VPSidebar {
+    width: var(--vp-sidebar-width);
+    max-width: 100%;
+  }
+}
+
+/* 指针设备上滚动条只在悬停侧边栏时出现 */
+@media (hover: hover) and (pointer: fine) {
+  .VPSidebar.VPSidebar {
+    overflow: hidden;
+  }
+
+  .VPSidebar.VPSidebar:hover {
+    overflow-y: auto;
+  }
+}

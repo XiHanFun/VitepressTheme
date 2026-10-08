@@ -1,0 +1,17 @@
+{
+  "name": "xihan-docs-theme-playground",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "@xihanfun/vitepress-theme 的预览站：本地看效果，CI 构建验证主题可用。",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "dependencies": {
+    "@xihanfun/vitepress-theme": "link:..",
+    "vitepress": "2.0.0-alpha.20",
+    "vue": "^3.5.43"
+  }
+}

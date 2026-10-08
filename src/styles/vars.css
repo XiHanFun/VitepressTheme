@@ -1,0 +1,92 @@
+/**
+ * 品牌色
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --xh-doc-brand-1: #1c64fd;
+  --xh-doc-brand-2: #4480ff;
+  --xh-doc-brand-3: #7ca4ff;
+  --xh-doc-brand-4: #b8cfff;
+  --xh-doc-brand-dark-1: #164ed1;
+  --xh-doc-brand-dark-2: #1341ad;
+  --xh-doc-brand-soft: #1c64fd14;
+  --xh-doc-accent: #8059f3;
+}
+
+.dark {
+  --xh-doc-brand-1: #4480ff;
+  --xh-doc-brand-2: #7ca4ff;
+  --xh-doc-brand-3: #b8cfff;
+  --xh-doc-brand-4: #e5edff;
+  --xh-doc-brand-dark-1: #1c64fd;
+  --xh-doc-brand-dark-2: #164ed1;
+  --xh-doc-brand-soft: #1c64fd14;
+  --xh-doc-accent: #9775fa;
+}
+
+:root {
+  --vp-c-brand-1: var(--xh-doc-brand-1);
+  --vp-c-brand-2: var(--xh-doc-brand-2);
+  --vp-c-brand-3: var(--xh-doc-brand-3);
+  --vp-c-brand-soft: var(--xh-doc-brand-soft);
+}
+
+/**
+ * 按钮
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: var(--vp-c-brand-3);
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--xh-doc-brand-dark-1);
+}
+
+/**
+ * 首页
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    var(--vp-c-brand-1) 30%,
+    var(--xh-doc-accent)
+  );
+}
+
+/**
+ * 侧边栏
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-sidebar-width: 338px;
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+}
+
+.dark {
+  --vp-sidebar-bg-color: var(--vp-c-bg-alt);
+}
+
+/**
+ * 提示块
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-custom-block-tip-border: var(--vp-c-brand-1);
+  --vp-custom-block-tip-text: var(--xh-doc-brand-dark-2);
+  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+}
+
+.dark {
+  --vp-custom-block-tip-text: var(--xh-doc-brand-3);
+}
+
+/**
+ * 搜索
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+  --docsearch-primary-color: var(--vp-c-brand-1) !important;
+}
