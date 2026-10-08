@@ -1,0 +1,36 @@
+# 名称
+name: 构建预览站
+
+# 触发条件：推送或合并请求到 dev、main
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+# 任务
+jobs:
+  build:
+    # 服务器环境：最新版 Ubuntu
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./playground/
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v7
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: 安装 pnpm
+        run: npm install -g pnpm@11
+
+      - name: 安装依赖
+        run: pnpm install
+
+      - name: 构建预览站
+        run: pnpm run build

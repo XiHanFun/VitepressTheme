@@ -1,0 +1,53 @@
+{
+  "name": "@xihanfun/vitepress-theme",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "曦寒文档站统一主题：配色、版式、正文组件与中文站点默认配置，供各 VitePress 文档站共用。",
+  "author": {
+    "name": "XiHanFun"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/XiHanFun/VitepressTheme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XiHanFun/VitepressTheme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/XiHanFun/VitepressTheme/issues"
+  },
+  "keywords": [
+    "vitepress",
+    "vitepress-theme",
+    "xihan",
+    "xihanfun"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./config": {
+      "types": "./src/config.d.ts",
+      "default": "./src/config.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "dev": "pnpm --dir playground dev",
+    "build": "pnpm --dir playground build"
+  },
+  "peerDependencies": {
+    "vitepress": "^2.0.0-alpha.20",
+    "vue": "^3.5.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

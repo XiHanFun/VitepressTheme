@@ -1,0 +1,58 @@
+# 名称
+name: 发布到 npm
+
+# 触发条件：推送 v* 标签，如 v1.0.0
+on:
+  push:
+    tags: ["v*"]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+# 任务
+jobs:
+  publish:
+    # 服务器环境：最新版 Ubuntu
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: 安装 pnpm
+        run: npm install -g pnpm@11
+
+      # 标签必须打在 main 的提交上，且标签号等于包里写的版本号
+      - name: 校验标签
+        run: |
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" refs/remotes/origin/main; then
+            echo "::error::标签 $GITHUB_REF_NAME 指向的提交 $GITHUB_SHA 不在 main 的历史里，拒绝发布"
+            exit 1
+          fi
+          version=$(node -p "require('./package.json').version")
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::标签 $GITHUB_REF_NAME 与包版本 $version 不一致，应为 v$version"
+            exit 1
+          fi
+
+      - name: 构建预览站
+        working-directory: ./playground/
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: 发布到 npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

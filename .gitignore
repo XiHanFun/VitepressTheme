@@ -1,0 +1,9 @@
+node_modules
+pnpm-lock.yaml
+*.tgz
+*.log
+.DS_Store
+.idea
+.vscode
+**/.vitepress/dist
+**/.vitepress/cache

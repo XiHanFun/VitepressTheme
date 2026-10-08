@@ -1,0 +1,131 @@
+/**
+ * 暗色模式链接：提亮品牌色，保证深底上的对比度
+ * --------------------------------------------------------------------------
+ * 类名写两遍用来追平默认主题带 scoped 属性的选择器特异性。
+ */
+
+.dark .vp-doc a,
+.dark .vp-doc a > code,
+.dark .VPNavBarMenuLink.VPNavBarMenuLink:hover,
+.dark .VPNavBarMenuLink.VPNavBarMenuLink.active,
+.dark .link.link:hover,
+.dark .link.link.active,
+.dark .edit-link-button.edit-link-button,
+.dark .pager-link .title {
+  color: var(--xh-doc-brand-3);
+}
+
+.dark .vp-doc a:hover,
+.dark .vp-doc a > code:hover {
+  color: var(--xh-doc-brand-4);
+  opacity: 1;
+}
+
+.dark .vp-doc .custom-block a {
+  transition: color 0.25s;
+}
+
+/**
+ * 滚动条
+ * -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.38);
+}
+
+/**
+ * 本地搜索
+ * -------------------------------------------------------------------------- */
+
+.VPLocalSearchBox .result {
+  --vp-c-bg-search-result: var(--vp-c-bg);
+  padding: 4px !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  background: var(--vp-c-bg-search-result) !important;
+}
+
+.VPLocalSearchBox .result.selected {
+  --vp-c-bg-search-result: var(--vp-c-bg-soft) !important;
+}
+
+.VPLocalSearchBox .result .excerpt-gradient-top {
+  background: linear-gradient(var(--vp-c-bg-search-result), transparent) !important;
+}
+
+.VPLocalSearchBox .result .excerpt-gradient-bottom {
+  background: linear-gradient(transparent, var(--vp-c-bg-search-result)) !important;
+}
+
+.VPLocalSearchBox .title-icon {
+  display: none;
+}
+
+.VPLocalSearchBox .excerpt-wrapper {
+  margin-top: 4px;
+}
+
+/**
+ * 导航徽章：导航标题右上角的发布阶段标记
+ * --------------------------------------------------------------------------
+ * 写法：<span class="xh-nav-badge xh-nav-badge--tip">稳定版</span>，
+ * 配色取 tip / warning / danger。
+ */
+
+.xh-nav-badge {
+  display: inline-block;
+  margin-left: 4px;
+  transform: translateY(-6px);
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.xh-nav-badge--tip {
+  border-color: var(--vp-badge-tip-border);
+  color: var(--vp-badge-tip-text);
+  background-color: var(--vp-badge-tip-bg);
+}
+
+.xh-nav-badge--warning {
+  border-color: var(--vp-badge-warning-border);
+  color: var(--vp-badge-warning-text);
+  background-color: var(--vp-badge-warning-bg);
+}
+
+.xh-nav-badge--danger {
+  border-color: var(--vp-badge-danger-border);
+  color: var(--vp-badge-danger-text);
+  background-color: var(--vp-badge-danger-bg);
+}
