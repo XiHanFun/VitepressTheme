@@ -60,12 +60,26 @@ export interface XiHanLlmsOptions {
   assets?: (context: { outDir: string; site: string; pages: XiHanLlmsPage[] }) => XiHanLlmsAsset[] | void | Promise<XiHanLlmsAsset[] | void>;
 }
 
+/** 顶部公告横幅 */
+export interface XiHanBanner {
+  /** 公告标识，换一条公告就换一个值，读者关闭过的标识不再显示 */
+  id: string;
+  /** 公告文案 */
+  text: string;
+  /** 按钮跳转地址 */
+  link?: string;
+  /** 按钮文案，缺省为「了解详情」 */
+  linkText?: string;
+}
+
 /** 曦寒文档站配置项：VitePress 站点配置加上几项共用约定 */
 export interface XiHanConfigOptions extends UserConfig<DefaultTheme.Config> {
   /** XiHanFun 组织下的仓库名，如 XiHan.Framework；生成社交链接与「在 GitHub 上编辑此页」地址，省略时社交链接指向组织主页 */
   repo?: string;
   /** 页面 keywords 元信息 */
   keywords?: string;
+  /** 顶部公告横幅，省略或为 null 时不显示 */
+  banner?: XiHanBanner | null;
   /** 构建期产出机读资产，并在开发服务器上提供 /__markdown/<页面路径>，与主题选项 pageMarkdown 配套 */
   llms?: XiHanLlmsOptions;
 }

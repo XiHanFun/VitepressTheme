@@ -112,6 +112,19 @@ function defaultHead(keywords) {
   ];
 }
 
+/** 读者关闭过的公告标识在 localStorage 里的键 */
+const BANNER_DISMISSED_KEY = "xh-docs-banner-dismissed";
+
+/**
+ * 公告横幅的 head 脚本：页面渲染前按读者是否关闭过这条公告决定是否占位，避免加载后页面下移。
+ * @param {import("./config").XiHanBanner} banner
+ */
+function bannerHead(banner) {
+  const id = JSON.stringify(banner.id);
+  const key = JSON.stringify(BANNER_DISMISSED_KEY);
+  return ["script", {}, `(()=>{let d=null;try{d=localStorage.getItem(${key})}catch{}if(d!==${id})document.documentElement.classList.add("xh-banner-open")})()`];
+}
+
 /**
  * 开发服务器上按需生成 /__markdown/<页面路径> 的 Markdown，与构建产物里的单页 .md 相同。
  * @param {import("./config").XiHanLlmsOptions} llms
@@ -175,7 +188,7 @@ function dedupeVue(dedupe) {
  * @returns {import("vitepress").UserConfig<import("vitepress").DefaultTheme.Config>}
  */
 export function defineXiHanConfig(options) {
-  const { repo, keywords, llms, head, themeConfig, vite, buildEnd, ...site } = options;
+  const { repo, keywords, banner, llms, head, themeConfig, vite, buildEnd, ...site } = options;
   const userVite = vite ?? {};
 
   return {
@@ -183,7 +196,7 @@ export function defineXiHanConfig(options) {
     lastUpdated: true,
     cleanUrls: true,
     ...site,
-    head: [...defaultHead(keywords), ...(head ?? [])],
+    head: [...defaultHead(keywords), ...(banner ? [bannerHead(banner)] : []), ...(head ?? [])],
     // 站点自己的 buildEnd 先跑，它抛错时不再产出机读资产
     async buildEnd(siteConfig) {
       await buildEnd?.(siteConfig);
@@ -193,6 +206,7 @@ export function defineXiHanConfig(options) {
     themeConfig: {
       ...defaultThemeConfig(repo),
       ...themeConfig,
+      banner: banner ?? null,
     },
     vite: {
       ...userVite,
