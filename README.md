@@ -12,6 +12,7 @@
 | 版式 | 宽屏不居中留白，导航栏、侧边栏与正文贴视口铺开；338px 侧边栏与页面同底，悬停时才出现滚动条 |
 | 细节 | 细滚动条、暗色模式链接提亮、本地搜索结果卡片、导航徽章 `.xh-nav-badge` |
 | 组件 | 正文上方的「取本页 Markdown」直链 |
+| 机读资产 | 构建期产出 `llms.txt` 索引、`llms-full.txt` 全站正文、按栏目的分册与每页 `.md`，开发服务器上按需生成单页 Markdown |
 | 配置 | 中文界面文案、本地搜索中文文案、目录与翻页、页脚、作者与图标元信息、按仓库名生成的社交链接与编辑链接 |
 
 ## 安装
@@ -47,9 +48,9 @@ export default defineXiHanConfig({
 | --- | --- |
 | `repo` | XiHanFun 组织下的仓库名，生成 GitHub / Gitee / GitCode 社交链接与「在 GitHub 上编辑此页」地址（指向仓库 `docs/` 目录）；省略时社交链接指向组织主页 |
 | `keywords` | 页面 keywords 元信息 |
-| `pageMarkdown` | `(relativePath) => Promise<string \| null>`，开发服务器上按需生成 `/__markdown/<页面路径>`，与主题选项 `pageMarkdown` 配套 |
+| `llms` | 机读资产，见下文；同时提供开发服务器上的 `/__markdown/<页面路径>`，与主题选项 `pageMarkdown` 配套 |
 
-站点里写的 `themeConfig` 字段覆盖同名默认值，`head` 追加在默认项之后，`vite.plugins` 追加在内置插件之后，`vite.resolve.dedupe`、`vite.ssr.noExternal`、`vite.optimizeDeps.exclude` 与主题需要的取值合并。
+站点里写的 `themeConfig` 字段覆盖同名默认值，`buildEnd` 先于机读资产执行（抛错时不再产出），`head` 追加在默认项之后，`vite.plugins` 追加在内置插件之后，`vite.resolve.dedupe`、`vite.ssr.noExternal`、`vite.optimizeDeps.exclude` 与主题需要的取值合并。
 
 `.vitepress/theme/index.ts`：
 
@@ -68,6 +69,34 @@ export default defineXiHanTheme({ pageMarkdown: true });
 | `enhanceApp` | 在默认主题的 `enhanceApp` 之后执行，用来注册站点自己的全局组件 |
 
 站点自己的样式在 `theme/index.ts` 里导入本包之后再导入，同等特异性下排在后面的覆盖主题。
+
+### 机读资产
+
+```ts
+defineXiHanConfig({
+  llms: {
+    title: "曦寒开发框架",
+    summary: "一段话简介",
+    sections: [
+      { dir: ".", label: "开始" },
+      { dir: "guide", label: "开发指南" },
+    ],
+    bundles: [{ name: "guide", label: "开发指南", dirs: ["guide"] }],
+  },
+});
+```
+
+| 字段 | 说明 |
+| --- | --- |
+| `title` / `summary` | `llms.txt` 的一级标题与引用块 |
+| `site` | 站点地址，缺省取文档站 `package.json` 的 `homepage` |
+| `sections` | 顶层目录在索引里的名字与排位，未登记的目录排在末尾 |
+| `bundles` | 另外汇编的分册 `llms-<name>.txt`，可收多个目录，`description` 写在分册开头 |
+| `fullDescription` | `llms-full.txt` 的补充说明 |
+| `transform` | `(body, rel) => string`，改写单页正文，如把站点自定义组件换成纯 Markdown |
+| `assets` | `({ outDir, site, pages }) => [{ name, description }]`，写出站点特有的资产并登记进索引 |
+
+正文里的 `<code v-pre>`、`<Badge text="…" />` 会压成行内代码，`[[toc]]` 会去掉；首页没有正文时输出 frontmatter。
 
 ## 本地开发
 
@@ -88,6 +117,7 @@ VitepressTheme/
 ├── src/
 │   ├── index.ts                 # 主题入口：defineXiHanTheme
 │   ├── config.js / config.d.ts  # 站点配置：defineXiHanConfig（Node 直接加载，写成 JS）
+│   ├── llms.js                  # 机读资产生成
 │   ├── components/              # XhPageMarkdown
 │   └── styles/                  # vars 配色 / layout 版式 / base 细节
 ├── playground/                  # 预览站

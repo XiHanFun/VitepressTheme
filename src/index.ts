@@ -12,7 +12,7 @@ export type XiHanLayoutSlot = () => VNode | VNode[] | null | undefined;
 
 /** 主题选项 */
 export interface XiHanThemeOptions {
-  /** 正文上方显示「取本页 Markdown」直链，开发服务器的 /__markdown/ 路由由配置项 pageMarkdown 提供 */
+  /** 正文上方显示「取本页 Markdown」直链，配合配置项 llms 生成同路径的 .md */
   pageMarkdown?: boolean;
   /** 填入默认布局的插槽，与 pageMarkdown 占用的 doc-before 同名时以这里为准 */
   slots?: Record<string, XiHanLayoutSlot>;

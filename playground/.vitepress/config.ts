@@ -1,22 +1,5 @@
 import type { DefaultTheme } from "vitepress";
-import { copyFile, mkdir, readFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { defineXiHanConfig } from "@xihanfun/vitepress-theme/config";
-
-const root = fileURLToPath(new URL("..", import.meta.url));
-
-/** 读取页面源文件，供开发服务器上的「取本页 Markdown」使用 */
-async function renderPageMarkdown(relativePath: string): Promise<string | null> {
-  if (!relativePath.endsWith(".md") || relativePath.split("/").includes(".."))
-    return null;
-  try {
-    return await readFile(join(root, relativePath), "utf8");
-  }
-  catch {
-    return null;
-  }
-}
 
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
@@ -50,14 +33,16 @@ export default defineXiHanConfig({
   description: "曦寒各文档站共用的 VitePress 主题",
   keywords: "曦寒,曦寒懿,文档主题,VitePress,XiHanFun",
   repo: "VitepressTheme",
-  pageMarkdown: renderPageMarkdown,
-  // 产物里放一份同路径的页面源文件，对应正文上方的「取本页 Markdown」
-  async buildEnd(siteConfig) {
-    for (const page of siteConfig.pages) {
-      const target = join(siteConfig.outDir, page);
-      await mkdir(dirname(target), { recursive: true });
-      await copyFile(join(siteConfig.srcDir, page), target);
-    }
+  llms: {
+    // 预览站不部署，地址指向 vitepress preview 的本地服务
+    site: "http://localhost:4173",
+    title: "曦寒文档主题",
+    summary: "曦寒各文档站共用的 VitePress 主题：配色、版式、正文组件与中文站点默认配置。",
+    sections: [
+      { dir: ".", label: "开始" },
+      { dir: "guide", label: "预览" },
+    ],
+    bundles: [{ name: "guide", label: "预览", dirs: ["guide"] }],
   },
   themeConfig: {
     nav,
