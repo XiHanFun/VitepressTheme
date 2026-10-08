@@ -1,38 +1,25 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from "vue";
-import { storage, usePromotions } from "../composables/promotions";
+import type { XiHanBanner } from "../config";
+import { useData } from "vitepress";
+import { computed } from "vue";
+import { storage } from "../composables/promotions";
 
 const DISMISSED_KEY = "xh-docs-banner-dismissed";
 
-const promotions = usePromotions();
-const dismissedId = ref<string | null>(null);
+const { theme } = useData<{ banner?: XiHanBanner | null }>();
+const banner = computed(() => theme.value.banner ?? null);
 
-const banner = computed(() => promotions.value?.banner ?? null);
-const open = computed(() => !!banner.value && banner.value.id !== dismissedId.value);
-
-watch(banner, () => {
-  dismissedId.value = storage.get(DISMISSED_KEY);
-});
-
-// 横幅占位时把高度交给默认主题，导航栏、侧边栏与正文整体下移
-watch(open, (value) => {
-  document.documentElement.classList.toggle("xh-banner-open", value);
-});
-
-onUnmounted(() => {
-  document.documentElement.classList.remove("xh-banner-open");
-});
-
+// 是否显示由 head 脚本在 html 上加的 xh-banner-open 决定，关闭时去掉它并记下这条公告
 function dismiss(): void {
   if (!banner.value)
     return;
   storage.set(DISMISSED_KEY, banner.value.id);
-  dismissedId.value = banner.value.id;
+  document.documentElement.classList.remove("xh-banner-open");
 }
 </script>
 
 <template>
-  <div v-if="open && banner" class="xh-banner" role="region" aria-label="公告">
+  <div v-if="banner" class="xh-banner" role="region" aria-label="公告">
     <div class="xh-banner__content">
       <p class="xh-banner__text">
         {{ banner.text }}
@@ -59,6 +46,14 @@ function dismiss(): void {
 </template>
 
 <style>
+.xh-banner {
+  display: none;
+}
+
+html.xh-banner-open .xh-banner {
+  display: flex;
+}
+
 html.xh-banner-open {
   --vp-layout-top-height: 64px;
 }
@@ -83,7 +78,6 @@ html.xh-banner-open {
   top: 0;
   right: 0;
   left: 0;
-  display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;

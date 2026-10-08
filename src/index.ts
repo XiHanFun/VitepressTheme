@@ -19,7 +19,7 @@ export type XiHanLayoutSlot = () => VNode | VNode[] | null | undefined;
 export interface XiHanThemeOptions {
   /** 正文上方显示「取本页 Markdown」直链，配合配置项 llms 生成同路径的 .md */
   pageMarkdown?: boolean;
-  /** 运营数据（公告横幅、赞助位、广告位）的 JSON 地址，缺省读组织门户发布的那份，false 关闭三者 */
+  /** 运营数据（赞助位、广告位）的 JSON 地址，缺省读组织门户发布的那份，false 关闭两者 */
   promotions?: string | false;
   /** GitHub Star 提示，缺省开启并取导航栏 GitHub 链接指向的仓库，false 关闭 */
   starPrompt?: XiHanStarPromptOptions | false;
@@ -49,7 +49,7 @@ export function defineXiHanTheme(options: XiHanThemeOptions = {}): Theme {
 
   const slots = composeSlots(
     {
-      "layout-top": resolved.promotions !== false && (() => h(XhBanner)),
+      "layout-top": () => h(XhBanner),
       "doc-before": options.pageMarkdown && (() => h(XhPageMarkdown)),
       "aside-outline-after": resolved.promotions !== false && (() => h(XhAsidePromotions)),
       "layout-bottom": resolved.starPrompt !== false && (() => h(XhStarPrompt)),
@@ -67,7 +67,8 @@ export function defineXiHanTheme(options: XiHanThemeOptions = {}): Theme {
   };
 }
 
-export type { XiHanAd, XiHanBanner, XiHanPromotions, XiHanSponsor } from "./composables/promotions";
+export type { XiHanAd, XiHanPromotions, XiHanSponsor } from "./composables/promotions";
+export type { XiHanBanner } from "./config";
 export type { XiHanStarPromptOptions } from "./options";
 export { XhPageMarkdown };
 

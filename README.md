@@ -48,6 +48,7 @@ export default defineXiHanConfig({
 | --- | --- |
 | `repo` | XiHanFun 组织下的仓库名，生成 GitHub / Gitee / GitCode 社交链接与「在 GitHub 上编辑此页」地址（指向仓库 `docs/` 目录）；省略时社交链接指向组织主页 |
 | `keywords` | 页面 keywords 元信息 |
+| `banner` | 顶部公告横幅 `{ id, text, link?, linkText? }`，各站自己管理；换一条公告就换一个 `id`，读者关闭过的 `id` 不再出现，省略即不显示 |
 | `llms` | 机读资产，见下文；同时提供开发服务器上的 `/__markdown/<页面路径>`，与主题选项 `pageMarkdown` 配套 |
 
 站点里写的 `themeConfig` 字段覆盖同名默认值，`buildEnd` 先于机读资产执行（抛错时不再产出），`head` 追加在默认项之后，`vite.plugins` 追加在内置插件之后，`vite.resolve.dedupe`、`vite.ssr.noExternal`、`vite.optimizeDeps.exclude` 与主题需要的取值合并。
@@ -65,7 +66,7 @@ export default defineXiHanTheme({ pageMarkdown: true });
 | 选项 | 说明 |
 | --- | --- |
 | `pageMarkdown` | 正文上方显示「取本页 Markdown」直链，指向构建产物里同路径的 `.md` |
-| `promotions` | 运营数据（公告横幅、赞助位、广告位）的 JSON 地址，缺省读 `https://docs.xihanfun.com/data/promotions.json`，`false` 关闭三者 |
+| `promotions` | 运营数据（赞助位、广告位）的 JSON 地址，缺省读 `https://docs.xihanfun.com/data/promotions.json`，`false` 关闭两者 |
 | `starPrompt` | GitHub Star 提示，缺省取导航栏 GitHub 链接指向的仓库（只指向组织主页时不提示），可传 `{ repo, name }` 覆盖，`false` 关闭 |
 | `slots` | 填入默认布局的插槽，渲染在主题自带内容之后，如 `{ "layout-bottom": () => h(MyComponent) }` |
 | `enhanceApp` | 在默认主题的 `enhanceApp` 之后执行，用来注册站点自己的全局组件 |
@@ -102,26 +103,26 @@ defineXiHanConfig({
 
 ### 运营数据
 
-公告横幅、赞助位与广告位共用一份 JSON，由组织门户站发布在 `docs/public/data/promotions.json`，各站运行时读取，改完部署门户即生效：
+赞助位与广告位共用一份 JSON，由组织门户站发布在 `docs/public/data/promotions.json`，各站运行时读取，改完部署门户即生效：
 
 ```json
 {
-  "banner": { "id": "2026-10-xxx", "text": "公告文案", "link": "https://…", "linkText": "了解详情" },
   "sponsorLink": "https://docs.xihanfun.com/cosmos/sponsor",
   "sponsors": [{ "name": "赞助商", "url": "https://…", "img": "https://…/logo.png", "tier": "large" }],
   "ads": [{ "name": "广告", "url": "https://…", "img": "https://…/ad.png", "text": "说明" }]
 }
 ```
 
-- `banner`：换一条公告就换一个 `id`，读者关闭过的 `id` 不再出现；置为 `null` 即撤下。
 - `sponsors`：`tier` 取 `large` 独占一行、`small`（缺省）一行两个，末尾总有一格「成为赞助商」指向 `sponsorLink`。
 - `ads`：每次打开页面随机展示一条，读者可以关闭。
 
-GitHub Star 提示不需要数据：读过两页正文、停留满一分钟，或从代码块、表格里复制内容时弹出；「稍后再说」七天内不再出现，点过 Star 三十天内不再出现，关闭或「不再提示」后不再出现。
+公告横幅不在这份数据里，由各站在 `defineXiHanConfig` 的 `banner` 里自己写；配置会在页面渲染前按读者是否关闭过决定是否占位，公告不会在加载后把页面往下推。
+
+GitHub Star 提示不需要数据，按钮上显示仓库当前的 Star 数（读不到时不显示）：读过两页正文、停留满一分钟，或从代码块、表格里复制内容时弹出；「稍后再说」七天内不再出现，点过 Star 三十天内不再出现，关闭或「不再提示」后不再出现。
 
 ## 本地开发
 
-`playground/` 是主题的预览站，以 `link:..` 引用本仓库源码，覆盖首页、正文排版、表格、代码、提示块与徽章，并用 `public/data/promotions.json` 里的示例数据展示公告、赞助与广告位。
+`playground/` 是主题的预览站，以 `link:..` 引用本仓库源码，覆盖首页、正文排版、表格、代码、提示块与徽章，公告横幅写在预览站配置里，赞助与广告位用 `public/data/promotions.json` 里的示例数据。
 
 ```bash
 cd playground

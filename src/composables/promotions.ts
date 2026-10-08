@@ -3,18 +3,6 @@ import { inBrowser } from "vitepress";
 import { inject, onMounted, ref } from "vue";
 import { xihanOptionsKey } from "../options";
 
-/** 顶部公告横幅 */
-export interface XiHanBanner {
-  /** 公告标识，换一条公告就换一个值，读者关闭过的标识不再显示 */
-  id: string;
-  /** 公告文案 */
-  text: string;
-  /** 按钮跳转地址 */
-  link?: string;
-  /** 按钮文案，缺省为「了解详情」 */
-  linkText?: string;
-}
-
 /** 赞助商 */
 export interface XiHanSponsor {
   name: string;
@@ -34,9 +22,8 @@ export interface XiHanAd {
   text?: string;
 }
 
-/** 运营数据：公告横幅、赞助位与广告位 */
+/** 运营数据：赞助位与广告位 */
 export interface XiHanPromotions {
-  banner?: XiHanBanner | null;
   sponsors?: XiHanSponsor[];
   /** 「成为赞助商」入口地址 */
   sponsorLink?: string;

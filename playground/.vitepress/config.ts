@@ -33,6 +33,12 @@ export default defineXiHanConfig({
   description: "曦寒各文档站共用的 VitePress 主题",
   keywords: "曦寒,曦寒懿,文档主题,VitePress,XiHanFun",
   repo: "VitepressTheme",
+  banner: {
+    id: "playground-demo",
+    text: "曦寒文档主题预览：公告横幅示例",
+    link: "https://docs.xihanfun.com",
+    linkText: "前往文档门户",
+  },
   llms: {
     // 预览站不部署，地址指向 vitepress preview 的本地服务
     site: "http://localhost:4173",
