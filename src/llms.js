@@ -181,7 +181,7 @@ export async function writeLlmsAssets(siteConfig, options) {
   const rank = dir => (order.includes(dir) ? order.indexOf(dir) : order.length);
   const dirs = [...new Set(pages.map(page => page.section))]
     .sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
-  const pagesIn = list => pages.filter(page => list.includes(page.section));
+  const pagesIn = list => list.flatMap(dir => pages.filter(page => page.section === dir));
   const labelOf = dir => sections.find(section => section.dir === dir)?.label ?? dir;
 
   const bundles = (options.bundles ?? []).map(bundle => ({ ...bundle, list: pagesIn(bundle.dirs) }));
@@ -225,8 +225,16 @@ export async function writeLlmsAssets(siteConfig, options) {
     index.push("");
   }
 
+  // 有说明时说明与索引各占一行，没有时页数与索引同一行
   const compile = (title, description, list) => [
-    [`# ${options.title} · ${title}`, "", `共 ${list.length} 页。${description ?? ""}`, `索引见 ${site}/llms.txt`, ""].join("\n"),
+    [
+      `# ${options.title} · ${title}`,
+      "",
+      ...(description
+        ? [`共 ${list.length} 页。${/[。！？]$/.test(description) ? description : `${description}。`}`, `索引见 ${site}/llms.txt`]
+        : [`共 ${list.length} 页。索引见 ${site}/llms.txt`]),
+      "",
+    ].join("\n"),
     ...list.map(pageBlock),
   ].join("\n---\n\n");
 
