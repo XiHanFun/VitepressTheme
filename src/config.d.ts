@@ -72,8 +72,16 @@ export interface XiHanBanner {
   linkText?: string;
 }
 
+/** 曦寒文档站的主题配置：默认主题的配置加上主题自带正文组件的文案 */
+export interface XiHanThemeConfig extends DefaultTheme.Config {
+  /** 示例全屏按钮进入全屏时的文案，缺省「全屏查看」 */
+  fullscreenLabel?: string;
+  /** 示例全屏按钮退出全屏时的文案，缺省「退出全屏」 */
+  exitFullscreenLabel?: string;
+}
+
 /** 曦寒文档站配置项：VitePress 站点配置加上几项共用约定 */
-export interface XiHanConfigOptions extends UserConfig<DefaultTheme.Config> {
+export interface XiHanConfigOptions extends UserConfig<XiHanThemeConfig> {
   /** XiHanFun 组织下的仓库名，如 XiHan.Framework；生成社交链接与「在 GitHub 上编辑此页」地址，省略时社交链接指向组织主页 */
   repo?: string;
   /** 页面 keywords 元信息 */
@@ -87,4 +95,4 @@ export interface XiHanConfigOptions extends UserConfig<DefaultTheme.Config> {
 /** 创建曦寒文档站配置：在站点配置之下垫上共用的语言、文案、搜索、页脚与构建设置 */
 export declare function defineXiHanConfig(
   options: XiHanConfigOptions,
-): UserConfig<DefaultTheme.Config>;
+): UserConfig<XiHanThemeConfig>;

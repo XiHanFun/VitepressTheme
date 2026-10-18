@@ -11,7 +11,7 @@
 | 配色 | 蓝色品牌色与明暗两套取值，首页标题渐变，提示块、按钮、链接、搜索高亮跟随品牌色 |
 | 版式 | 宽屏不居中留白，导航栏、侧边栏与正文贴视口铺开；338px 侧边栏与页面同底，悬停时才出现滚动条 |
 | 细节 | 细滚动条、暗色模式链接提亮、本地搜索结果卡片、导航徽章 `.xh-nav-badge` |
-| 组件 | 正文上方的「取本页 Markdown」直链；顶部公告横幅、右侧赞助位与广告位、右下角 GitHub Star 提示 |
+| 组件 | 正文上方的「取本页 Markdown」直链；顶部公告横幅、右侧赞助位与广告位、右下角 GitHub Star 提示；可全屏的示例 `XhFullscreen` |
 | 机读资产 | 构建期产出 `llms.txt` 索引、`llms-full.txt` 全站正文、按栏目的分册与每页 `.md`，开发服务器上按需生成单页 Markdown |
 | 配置 | 中文界面文案、本地搜索中文文案、目录与翻页、页脚、作者与图标元信息、按仓库名生成的社交链接与编辑链接 |
 
@@ -72,6 +72,27 @@ export default defineXiHanTheme({ pageMarkdown: true });
 | `enhanceApp` | 在默认主题的 `enhanceApp` 之后执行，用来注册站点自己的全局组件 |
 
 站点自己的样式在 `theme/index.ts` 里导入本包之后再导入，同等特异性下排在后面的覆盖主题。
+
+### 可全屏的示例
+
+`<XhFullscreen>` 包住一个示例，右上角出一颗「全屏查看」按钮，点了用浏览器的全屏铺满屏幕，Esc 或再点「退出全屏」回来，焦点回到按钮。浏览器不支持元素全屏时不出按钮。主题已全局注册，Markdown 里直接写；站点自己的 Vue 组件里也可以 `import { XhFullscreen } from "@xihanfun/vitepress-theme"`。
+
+```md
+<XhFullscreen>
+  <MyDemo />
+</XhFullscreen>
+```
+
+全屏时组件根上有 `data-fullscreen`，正文是一列弹性盒，要跟着屏幕长高的内容由站点写 `flex: 1`：
+
+```css
+.xh-fullscreen[data-fullscreen] .my-demo {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+```
+
+按钮文案取主题配置的 `fullscreenLabel`（缺省「全屏查看」）与 `exitFullscreenLabel`（缺省「退出全屏」），站点可在 `themeConfig` 里改。
 
 ### 机读资产
 
@@ -142,7 +163,8 @@ VitepressTheme/
 │   ├── llms.js                  # 机读资产生成
 │   ├── options.ts               # 主题运行时选项
 │   ├── composables/             # 运营数据读取
-│   ├── components/              # 取本页 Markdown、公告横幅、赞助与广告位、Star 提示
+│   ├── labels.js                # 主题组件的中文界面文案
+│   ├── components/              # 取本页 Markdown、公告横幅、赞助与广告位、Star 提示、示例全屏
 │   └── styles/                  # vars 配色 / layout 版式 / base 细节
 ├── playground/                  # 预览站
 ├── .github/workflows/           # ci.yml 构建预览站，release.yml 发布到 npm
@@ -151,7 +173,7 @@ VitepressTheme/
 
 ## 发布
 
-1. 改 `package.json` 的 `version`，提交到 `dev`。
+1. 改 `package.json` 的 `version`，在 `CHANGELOG.md` 写好这一版的更新日志，提交到 `dev`。
 2. 合入 `main` 后打 `v<版本号>` 标签并推送。
 3. `release.yml` 校验标签打在 `main` 上且与版本号一致、预览站能构建，再发布到 npm。
 

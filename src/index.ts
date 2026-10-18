@@ -5,6 +5,7 @@ import DefaultTheme from "vitepress/theme";
 import { h } from "vue";
 import XhAsidePromotions from "./components/XhAsidePromotions.vue";
 import XhBanner from "./components/XhBanner.vue";
+import XhFullscreen from "./components/XhFullscreen.vue";
 import XhPageMarkdown from "./components/XhPageMarkdown.vue";
 import XhStarPrompt from "./components/XhStarPrompt.vue";
 import { DEFAULT_PROMOTIONS_URL, xihanOptionsKey } from "./options";
@@ -62,14 +63,16 @@ export function defineXiHanTheme(options: XiHanThemeOptions = {}): Theme {
     Layout: () => h(DefaultTheme.Layout, null, slots),
     async enhanceApp(ctx) {
       ctx.app.provide(xihanOptionsKey, resolved);
+      // 正文里可以直接写 <XhFullscreen>…</XhFullscreen> 包住示例
+      ctx.app.component("XhFullscreen", XhFullscreen);
       await options.enhanceApp?.(ctx);
     },
   };
 }
 
 export type { XiHanAd, XiHanPromotions, XiHanSponsor } from "./composables/promotions";
-export type { XiHanBanner } from "./config";
+export type { XiHanBanner, XiHanThemeConfig } from "./config";
 export type { XiHanStarPromptOptions } from "./options";
-export { XhPageMarkdown };
+export { XhFullscreen, XhPageMarkdown };
 
 export default defineXiHanTheme();

@@ -1,4 +1,5 @@
 import { defineXiHanTheme } from "@xihanfun/vitepress-theme";
+import "./style.css";
 
 export default defineXiHanTheme({
   pageMarkdown: true,

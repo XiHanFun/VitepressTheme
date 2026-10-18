@@ -1,3 +1,4 @@
+import { XIHAN_LABELS } from "./labels.js";
 import { renderPageMarkdown, resolveSite, writeLlmsAssets } from "./llms.js";
 
 /** 本包名，用于让 Vite 编译主题源码而不是当作预构建依赖 */
@@ -74,6 +75,7 @@ function defaultThemeConfig(repo) {
     lightModeSwitchTitle: "切换到浅色模式",
     darkModeSwitchTitle: "切换到深色模式",
     skipToContentLabel: "跳转到内容",
+    ...XIHAN_LABELS,
     notFound: {
       title: "页面未找到",
       quote: "但如果你不改变方向，并且继续寻找，你可能最终会到达你所前往的地方。",
