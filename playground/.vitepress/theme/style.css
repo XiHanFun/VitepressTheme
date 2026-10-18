@@ -1,0 +1,14 @@
+/* 预览站「可全屏的示例」里的示例舞台 */
+.playground-stage {
+  display: grid;
+  place-items: center;
+  height: 16rem;
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: 8px;
+  color: var(--vp-c-text-2);
+}
+
+.xh-fullscreen[data-fullscreen] .playground-stage {
+  flex: 1 1 auto;
+  height: auto;
+}

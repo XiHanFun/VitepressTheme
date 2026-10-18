@@ -33,3 +33,20 @@
 ```
 
 配色取 `tip`、`warning`、`danger` 三种。
+
+## 可全屏的示例
+
+用 `<XhFullscreen>` 包住示例，右上角出一颗「全屏查看」按钮，全屏后示例铺满屏幕，Esc 或再点按钮退出：
+
+<XhFullscreen>
+  <div class="playground-stage">示例舞台：全屏后跟着屏幕长高</div>
+</XhFullscreen>
+
+全屏时组件根上有 `data-fullscreen`，正文是一列弹性盒；要跟着屏幕长高的内容写 `flex: 1`：
+
+```css
+.xh-fullscreen[data-fullscreen] .playground-stage {
+  flex: 1 1 auto;
+  height: auto;
+}
+```
