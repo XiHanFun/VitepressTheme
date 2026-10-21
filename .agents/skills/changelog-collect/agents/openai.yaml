@@ -1,0 +1,7 @@
+interface:
+  display_name: "VitepressTheme 更新日志"
+  short_description: "从提交与差异整理站点作者与读者可感知的版本日志"
+  default_prompt: "使用 $xihan-theme-changelog-collect 整理指定版本范围的更新日志。"
+
+policy:
+  allow_implicit_invocation: true

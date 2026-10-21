@@ -1,0 +1,7 @@
+interface:
+  display_name: "VitepressTheme 主题开发"
+  short_description: "修改主题样式、正文组件与站点默认配置，并在预览站与各文档站验证"
+  default_prompt: "使用 $xihan-theme-theme-development 实现并验证一次主题改动。"
+
+policy:
+  allow_implicit_invocation: true

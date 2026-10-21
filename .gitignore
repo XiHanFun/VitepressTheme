@@ -7,3 +7,7 @@ pnpm-lock.yaml
 .vscode
 **/.vitepress/dist
 **/.vitepress/cache
+
+# Claude Code 的本机文件（worktree、本机设置、启动配置等）不入库，只留指向 .agents/skills 的链接
+.claude/*
+!.claude/skills
