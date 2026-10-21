@@ -55,18 +55,12 @@ html.xh-banner-open .xh-banner {
 }
 
 html.xh-banner-open {
-  --vp-layout-top-height: 64px;
-}
-
-@media (max-width: 768px) {
-  html.xh-banner-open {
-    --vp-layout-top-height: 56px;
-  }
+  --vp-layout-top-height: 40px;
 }
 
 @media (max-width: 480px) {
   html.xh-banner-open {
-    --vp-layout-top-height: 48px;
+    --vp-layout-top-height: 36px;
   }
 }
 </style>
@@ -81,14 +75,13 @@ html.xh-banner-open {
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  height: var(--vp-layout-top-height, 64px);
-  padding: 0 48px 0 12px;
+  height: var(--vp-layout-top-height, 40px);
+  padding: 0 44px 0 12px;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--vp-c-white);
   background: #0f0f13;
   background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .xh-banner__content {
@@ -96,15 +89,16 @@ html.xh-banner-open {
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 
 .xh-banner__text {
   margin: 0;
   overflow: hidden;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -114,12 +108,14 @@ html.xh-banner-open {
   flex-shrink: 0;
   align-items: center;
   gap: 4px;
-  padding: 6px 16px;
-  border-radius: 8px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 6px;
   color: var(--vp-c-white);
   background: linear-gradient(120deg, var(--xh-doc-accent) 0%, var(--xh-doc-brand-1) 100%);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  line-height: 24px;
   text-decoration: none;
   transition: opacity 0.2s;
 }
@@ -130,22 +126,22 @@ html.xh-banner-open {
 }
 
 .xh-banner__arrow {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .xh-banner__close {
   position: absolute;
   z-index: 1;
   top: 50%;
-  right: 12px;
+  right: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   color: rgba(255, 255, 255, 0.72);
   background: transparent;
   cursor: pointer;
@@ -159,8 +155,8 @@ html.xh-banner-open {
 }
 
 .xh-banner__close svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   fill: currentColor;
 }
 
@@ -186,24 +182,23 @@ html.xh-banner-open {
   opacity: 0.3;
 }
 
-@media (max-width: 768px) {
-  .xh-banner__text {
-    font-size: 14px;
-  }
-
-  .xh-banner__action {
-    padding: 4px 12px;
-    font-size: 13px;
-  }
-}
-
 @media (max-width: 480px) {
+  .xh-banner {
+    padding-right: 40px;
+  }
+
   .xh-banner__content {
     gap: 8px;
   }
 
   .xh-banner__text {
     font-size: 13px;
+  }
+
+  .xh-banner__action {
+    height: 22px;
+    padding: 0 8px;
+    line-height: 22px;
   }
 }
 </style>
