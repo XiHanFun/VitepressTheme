@@ -32,7 +32,7 @@ import { defineXiHanConfig } from "@xihanfun/vitepress-theme/config";
 
 export default defineXiHanConfig({
   title: "曦寒开发框架文档",
-  description: "基于 DotNet 的模块化开发框架",
+  description: "基于 DotNet 的微内核开发框架",
   keywords: "曦寒,开发框架,DotNet",
   repo: "XiHan.Framework",
   themeConfig: {
